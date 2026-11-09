@@ -1,36 +1,74 @@
-# KIVORA Marketplace starter
+# KIVORA Marketplace — custom backend edition
 
-This package is a more complete marketplace foundation, including:
-- Responsive storefront, category filters and search
-- Product cards that display real uploaded photos
-- Cart stored in the visitor's browser
-- Email sign-up and login using Supabase Auth
-- Seller product listing form with image preview
-- Uploads to Supabase Storage and product records in Supabase Database
-- SQL setup with row-level security policies
+This version replaces the browser-only Supabase integration with a custom Node.js + Express API and PostgreSQL database. It includes:
 
-## Setup required before real use
+- Black-and-gold animated KIVORA intro (automatically transitions after 4 seconds; no skip button).
+- Buyer and seller registration and login using email + password.
+- Password hashing with bcrypt; signed session in an HttpOnly cookie.
+- Seller product listing with JPG/PNG/WEBP photo upload (max 5 MB).
+- Public product catalogue, category filtering, and search.
+- Admin dashboard for viewing accounts/listings, suspending non-admin accounts, and hiding/restoring listings.
+- Buyer/seller role checks on the server, not just in browser JavaScript.
 
-The website is not a fully launched commercial marketplace yet. You must connect a Supabase project and later configure a payment provider, shipping, refunds, seller verification, moderation and order management.
+## Important before going live
 
-### 1. Create Supabase project
-Create a project at https://supabase.com/. In Project Settings → API, copy the Project URL and public anon key.
+This is a working application codebase, but it is **not live until you create a PostgreSQL database, configure environment variables, install dependencies, and deploy it to a host that runs Node.js**. GitHub Pages alone cannot run this backend. Do not put database passwords or `JWT_SECRET` in frontend JavaScript or commit `.env` to GitHub.
 
-### 2. Create database and image storage
-Open Supabase → SQL Editor → New query. Copy all of `supabase_setup.sql`, run it, and confirm it succeeds. This creates the products table, storage bucket and security policies.
+Product images in this starter are saved in the server's `uploads/` directory. Use a host with a persistent disk, or replace this with object storage (for example S3-compatible storage) before production. Ephemeral server filesystems can erase uploads after redeploy/restart.
 
-### 3. Connect the website
-Open `app.js`. Replace `YOUR_SUPABASE_PROJECT_URL` and `YOUR_SUPABASE_ANON_KEY` with the Project URL and public anon key. Do not put a `service_role` key in browser code.
+Checkout is intentionally disabled. Payment gateway integration, order management, shipping, refunds, seller verification/KYC, moderation workflows, privacy policy, terms, backups, monitoring, and security review are still required before accepting real orders or payments.
 
-### 4. Upload to GitHub
-Upload `index.html`, `style.css`, `app.js`, `supabase_setup.sql`, and `README.md` to the root of your KIVORA repository. Keep the filenames unchanged.
+## 1. Create the database
 
-### 5. Test
-Deploy the site, create a test account, log in, open Sell, upload a test product photo, and confirm it appears in the storefront. Test with non-sensitive test data first.
+Create a PostgreSQL database with your hosting provider. Run the entire `schema.sql` file in its SQL console. It creates `users` and `products` tables and indexes.
 
-## Important limitations
-- Product image upload and listing persistence work only after Supabase is configured and SQL is run.
-- The cart is currently browser-local; it is not synced between devices or saved as an order.
-- Checkout is intentionally not active. A secure payment provider and server-side order validation are required.
-- Seller profiles, seller dashboards, admin moderation, shipping integration, customer reviews, stock management, returns and notifications are future build stages.
-- Do not collect real customer payment details or promise delivery until those systems are implemented and tested.
+## 2. Configure the server
+
+Install Node.js 20 or newer. In this folder:
+
+```bash
+npm install
+```
+
+Copy `.env.example` to `.env`, then set:
+
+- `DATABASE_URL`: your PostgreSQL connection string.
+- `JWT_SECRET`: a long random secret (at least 32 characters).
+- `ADMIN_EMAIL`: the exact email address you want to use for the first admin account.
+- `DATABASE_SSL=true` if your database provider requires SSL.
+- `COOKIE_SECURE=true` in production (HTTPS).
+
+Never share `.env` or publish it to GitHub.
+
+## 3. Run locally
+
+```bash
+npm start
+```
+
+Open `http://localhost:3000`. The API health check is `http://localhost:3000/api/health`.
+
+Register with the exact `ADMIN_EMAIL` address to receive the admin role. Other visitors can register as buyers or sellers. Admin status cannot be selected from the public sign-up form.
+
+## 4. Deploy
+
+Deploy the whole `kivora` folder to a Node.js hosting service (not GitHub Pages as a standalone static site). Add the environment variables in the host's dashboard, run `npm install`, and use `npm start`. Point your domain to that service and ensure HTTPS is enabled. Set `COOKIE_SECURE=true` once HTTPS is active.
+
+If deploying to a platform with an ephemeral filesystem, configure persistent disk storage for `/uploads` or migrate uploaded images to durable object storage. Back up PostgreSQL regularly.
+
+## 5. GitHub
+
+You can use GitHub to store/version the code, but GitHub is not the backend host. Upload the contents of this folder to the repository. Keep `.env` out of GitHub; `.gitignore` excludes it.
+
+## API overview
+
+- `POST /api/auth/signup` — create buyer/seller account.
+- `POST /api/auth/login` — sign in.
+- `GET /api/auth/me` — current session.
+- `POST /api/auth/logout` — sign out.
+- `GET /api/products` — public active listings.
+- `POST /api/products` — seller/admin image + product upload.
+- `DELETE /api/products/:id` — seller removes own listing; admin can remove any.
+- `GET /api/admin/overview` — admin-only accounts and listings.
+- `PATCH /api/admin/users/:id/status` — admin suspends/reactivates non-admin account.
+- `PATCH /api/admin/products/:id/status` — admin hides/restores listing.
