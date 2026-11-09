@@ -14,17 +14,3 @@ body:not(.authenticated)>.announcement,body:not(.authenticated)>.header,body:not
 .entry-screen{position:fixed;inset:0;z-index:900;background:radial-gradient(circle at 85% 10%,#d9efb833,transparent 30%),#f6f7f3;display:grid;place-items:center;padding:22px;overflow:auto}.entry-card{width:min(100%,520px);background:#fff;border:1px solid #e9ece4;border-radius:22px;padding:clamp(25px,6vw,48px);box-shadow:0 25px 90px #19200d12}.entry-brand{font:800 26px Manrope;letter-spacing:4px;margin-bottom:38px}.entry-brand span{color:#9ecb31}.entry-card h1{font:800 clamp(30px,6vw,43px)/1.12 Manrope;letter-spacing:-1.8px;margin:0 0 12px;color:#17191b}.entry-copy{font-size:13px;line-height:1.7;color:#73776d;margin:0 0 25px}.role-options{display:grid;gap:12px}.role-card{position:relative;text-align:left;border:1px solid #e7eae2;background:#fbfcf9;border-radius:13px;padding:18px 48px 18px 62px;cursor:pointer;transition:.2s}.role-card:hover,.role-card:focus{border-color:#a5d53a;background:#f7fbeF;transform:translateY(-2px)}.role-icon{position:absolute;left:18px;top:21px;font-size:25px}.role-card b,.role-card small{display:block}.role-card b{font:700 15px Manrope;color:#1b1d19}.role-card small{font-size:11px;color:#777d70;margin-top:5px}.role-arrow{position:absolute;right:19px;top:25px;font-size:22px;color:#8db82d}.entry-foot{text-align:center;font-size:10px;color:#92968b;margin:22px 0 0}.back-entry{border:0;background:none;color:#78836b;font-size:11px;cursor:pointer;margin:-3px 0 13px;padding:0}.modal{z-index:950;border-radius:18px}.overlay{z-index:940}
 @keyframes particleGather{0%{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}25%{opacity:1}100%{transform:translate(0,0) scale(.5);opacity:0}}@keyframes markReveal{to{opacity:1;transform:scale(1)}}@keyframes wordReveal{to{opacity:1;transform:translateY(0)}}@keyframes loadLine{to{transform:scaleX(1)}}@keyframes glowPulse{to{opacity:.23;transform:scale(1.2)}}@keyframes introExit{to{opacity:0;visibility:hidden}}
 @media(prefers-reduced-motion:reduce){.particle,.intro-mark svg,.intro-word,.intro-tag,.intro-loader,.intro-loader i,.intro-glow{animation-duration:.01ms!important;animation-delay:0ms!important}}
-/* KIVORA black-and-gold entry and admin styling */
-.entry-screen{background:radial-gradient(circle at 85% 10%,#d5ad6230,transparent 32%),#0b0b0d;color:#f7f3e9}
-.entry-card{background:#17171b;border:1px solid #5d4929;box-shadow:0 25px 90px #0009;color:#f7f3e9;border-radius:14px}
-.entry-brand{color:#f0d18b}.entry-brand span{color:#d5ad62}
-.entry-card h1,.role-card b{color:#fff}
-.entry-copy,.role-card small,.entry-foot{color:#c3b9a6}
-.role-card{background:#202024;border-color:#514329;border-radius:8px}
-.role-card:hover,.role-card:focus{border-color:#d5ad62;background:#29251e}
-.role-arrow{color:#d5ad62}.back-entry{color:#b9924f}
-#adminContent h3{font:700 14px Manrope;margin:22px 0 9px}
-.admin-list{border:1px solid var(--line);max-height:220px;overflow:auto}
-.admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px;border-bottom:1px solid var(--line)}
-.admin-row:last-child{border-bottom:0}.admin-row span{min-width:0}.admin-row b,.admin-row small{display:block;overflow-wrap:anywhere}.admin-row b{font-size:11px}.admin-row small{font-size:9px;color:#888;margin-top:4px}.admin-row button{border:1px solid #c6a05c;background:#fffaf0;padding:7px 9px;font-size:10px;cursor:pointer;white-space:nowrap}
-.header nav button{white-space:nowrap}
